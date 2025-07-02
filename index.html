@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIGC视觉设计作品集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        /* AIGC主题渐变效果 */
+        .aigc-gradient {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            background-size: 200% 200%;
+            animation: gradient-shift 8s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 神经网络背景 */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 20% 50%, #6366f1 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #8b5cf6 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, #ec4899 0%, transparent 50%);
+        }
+        
+        /* 霓虹光效 */
+        .neon-border {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 2px;
+        }
+        
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.8;
+            filter: blur(10px);
+            background-size: 400% 400%;
+            animation: gradient-shift 4s ease infinite;
+        }
+        
+        /* 作品卡片效果 */
+        .project-card {
+            background: linear-gradient(135deg, #1a1a1a, #252525);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .project-card:hover::before {
+            left: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #6366f1;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* 图片画廊效果 */
+        .gallery-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .gallery-slider {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-slide {
+            min-width: 100%;
+            position: relative;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(99, 102, 241, 0.8);
+        }
+        
+        .gallery-nav.prev {
+            left: 10px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .gallery-nav.next {
+            right: 10px;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .gallery-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .gallery-dot.active {
+            background: #6366f1;
+            width: 30px;
+            border-radius: 5px;
+        }
+        
+        /* 技术标签样式 */
+        .tech-tag {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .tech-tag:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+        
+        /* 文字渐变效果 */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 5px;
+        }
+        
+        /* 响应式图片占位 */
+        .image-placeholder {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 14px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* 分割线效果 */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+            margin: 80px 0;
+        }
+        
+        /* 浮动元素动画 */
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- 神经网络背景 -->
+    <div class="neural-bg"></div>
+    
+    <!-- 导航栏 - 极简设计 -->
+    <nav class="fixed w-full top-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold gradient-text">AIGC Portfolio</div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#hero" class="text-gray-400 hover:text-white transition-colors">首页</a>
+                    <a href="#projects" class="text-gray-400 hover:text-white transition-colors">作品集</a>
+                    <a href="#contact" class="text-gray-400 hover:text-white transition-colors">联系</a>
+                    <button class="aigc-gradient px-6 py-2 rounded-full text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+                        下载简历
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首屏 - 极简介绍 -->
+    <section id="hero" class="min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-8 float-animation">
+                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden neon-border p-1">
+                    <div class="w-full h-full rounded-full image-placeholder">
+                        <div>
+                            <i class="fas fa-user text-2xl mb-2"></i><br>
+                            <span class="text-xs">个人头像</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                <span class="gradient-text">AIGC视觉设计师</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                专注于AI驱动的视觉创新 · 2年+商业项目经验 · 全流程解决方案
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <span class="tech-tag">Stable Diffusion</span>
+                <span class="tech-tag">ComfyUI</span>
+                <span class="tech-tag">Midjourney</span>
+                <span class="tech-tag">RunwayML</span>
+                <span class="tech-tag">ControlNet</span>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <a href="#projects" class="aigc-gradient px-8 py-4 rounded-full text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+                    查看作品集
+                </a>
+                <a href="#contact" class="border border-white/20 px-8 py-4 rounded-full text-white font-semibold hover:bg-white/10 transition-all">
+                    合作咨询
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分割线 -->
+    <div class="section-divider"></div>
+
+    <!-- 作品集展示 -->
+    <section id="projects" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-20">
+                <span class="gradient-text">精选作品集</span>
+            </h2>
+            
+            <!-- 项目1：电商产品视觉重塑 -->
+            <div class="project-card rounded-3xl p-8 md:p-12 mb-20">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- 左侧：图片画廊 -->
+                    <div class="gallery-container h-96 lg:h-full">
+                        <div class="gallery-slider" id="gallery1">
+                            <!-- 图片1 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-image text-3xl mb-2"></i><br>
+                                        <span>产品原图对比</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 图片2 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-magic text-3xl mb-2"></i><br>
+                                        <span>AI优化后效果</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 图片3 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-chart-line text-3xl mb-2"></i><br>
+                                        <span>数据对比图表</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="gallery-nav prev" onclick="changeSlide('gallery1', -1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="gallery-nav next" onclick="changeSlide('gallery1', 1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="gallery-dots">
+                            <span class="gallery-dot active" onclick="goToSlide('gallery1', 0)"></span>
+                            <span class="gallery-dot" onclick="goToSlide('gallery1', 1)"></span>
+                            <span class="gallery-dot" onclick="goToSlide('gallery1', 2)"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧：项目详情 -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-3xl font-bold mb-4">电商产品视觉重塑</h3>
+                            <p class="text-gray-400 text-lg leading-relaxed">
+                                为某知名3C品牌重新设计产品展示图，通过AI技术提升视觉吸引力和转化率。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">设计理念</h4>
+                            <p class="text-gray-400 leading-relaxed">
+                                结合品牌调性与目标用户审美，运用AI生成技术创造更具科技感和未来感的产品展示效果，
+                                同时保持产品真实性和品牌识别度。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">技术方案</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">Stable Diffusion XL</span>
+                                <span class="tech-tag">ControlNet</span>
+                                <span class="tech-tag">ComfyUI</span>
+                                <span class="tech-tag">Photoshop</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                使用ControlNet保持产品轮廓精准度，通过自定义LoRA模型确保品牌风格一致性，
+                                配合ComfyUI工作流实现批量处理。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">项目成果</h4>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">45%</div>
+                                    <div class="text-sm text-gray-400">点击率提升</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">3天</div>
+                                    <div class="text-sm text-gray-400">项目周期</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">200+</div>
+                                    <div class="text-sm text-gray-400">SKU处理</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">工作流程</h4>
+                            <ol class="space-y-2 text-gray-400">
+                                <li class="flex items-start">
+                                    <span class="gradient-text font-bold mr-3">01</span>
+                                    <span>产品拍摄与素材准备</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="gradient-text font-bold mr-3">02</span>
+                                    <span>AI模型训练与风格定制</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="gradient-text font-bold mr-3">03</span>
+                                    <span>批量生成与质量控制</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="gradient-text font-bold mr-3">04</span>
+                                    <span>精修优化与最终交付</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 项目2：品牌虚拟形象设计 -->
+            <div class="project-card rounded-3xl p-8 md:p-12 mb-20">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- 左侧：图片画廊 -->
+                    <div class="gallery-container h-96 lg:h-full">
+                        <div class="gallery-slider" id="gallery2">
+                            <!-- 图片1 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-user-circle text-3xl mb-2"></i><br>
+                                        <span>虚拟形象设计稿</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 图片2 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-palette text-3xl mb-2"></i><br>
+                                        <span>多风格展示</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 图片3 -->
+                            <div class="gallery-slide">
+                                <div class="w-full h-full image-placeholder">
+                                    <div>
+                                        <i class="fas fa-th text-3xl mb-2"></i><br>
+                                        <span>应用场景展示</span><br>
+                                        <span class="text-xs">建议尺寸: 1200x800px</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="gallery-nav prev" onclick="changeSlide('gallery2', -1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="gallery-nav next" onclick="changeSlide('gallery2', 1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="gallery-dots">
+                            <span class="gallery-dot active" onclick="goToSlide('gallery2', 0)"></span>
+                            <span class="gallery-dot" onclick="goToSlide('gallery2', 1)"></span>
+                            <span class="gallery-dot" onclick="goToSlide('gallery2', 2)"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧：项目详情 -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-3xl font-bold mb-4">品牌虚拟形象设计</h3>
+                            <p class="text-gray-400 text-lg leading-relaxed">
+                                为新锐科技品牌打造独特的AI虚拟代言人，实现品牌人格化和年轻化战略。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">设计理念</h4>
+                            <p class="text-gray-400 leading-relaxed">
+                                融合赛博朋克美学与东方元素，创造既具科技感又有亲和力的虚拟形象。
+                                通过AI技术确保形象在不同场景下的一致性和灵活性。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">技术方案</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">Midjourney V6</span>
+                                <span class="tech-tag">Stable Diffusion</span>
+                                <span class="tech-tag">Character LoRA</span>
+                                <span class="tech-tag">Live2D</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                通过Midjourney进行概念探索，使用自训练LoRA模型保证角色一致性，
+                                结合Live2D技术实现动态表现。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">项目成果</h4>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">1个</div>
+                                    <div class="text-sm text-gray-400">主形象</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">50+</div>
+                                    <div class="text-sm text-gray-400">表情动作</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">5套</div>
+                                    <div class="text-sm text-gray-400">服装造型</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">应用场景</h4>
+                            <ul class="space-y-2 text-gray-400">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-purple-400 mr-3"></i>
+                                    <span>品牌官网与APP界面</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-purple-400 mr-3"></i>
+                                    <span>社交媒体内容营销</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-purple-400 mr-3"></i>
+                                    <span>线下活动互动展示</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-purple-400 mr-3"></i>
+                                    <span>产品发布会演示</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 项目3：AI短视频内容创作 -->
+            <div class="project-card rounded-3xl p-8 md:p-12 mb-20">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- 左侧：视频展示 -->
+                    <div class="space-y-6">
+                        <div class="aspect-video bg-black rounded-xl overflow-hidden">
+                            <div class="w-full h-full image-placeholder">
+                                <div>
+                                    <i class="fas fa-play-circle text-4xl mb-2"></i><br>
+                                    <span>视频作品展示</span><br>
+                                    <span class="text-xs">支持嵌入视频或GIF</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 视频缩略图网格 -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="aspect-video image-placeholder rounded-lg">
+                                <div class="text-xs">
+                                    <i class="fas fa-film mb-1"></i><br>
+                                    场景1
+                                </div>
+                            </div>
+                            <div class="aspect-video image-placeholder rounded-lg">
+                                <div class="text-xs">
+                                    <i class="fas fa-film mb-1"></i><br>
+                                    场景2
+                                </div>
+                            </div>
+                            <div class="aspect-video image-placeholder rounded-lg">
+                                <div class="text-xs">
+                                    <i class="fas fa-film mb-1"></i><br>
+                                    场景3
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧：项目详情 -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-3xl font-bold mb-4">AI短视频内容创作</h3>
+                            <p class="text-gray-400 text-lg leading-relaxed">
+                                为品牌社交媒体运营提供批量化AI视频内容解决方案，提升内容产出效率。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">创作理念</h4>
+                            <p class="text-gray-400 leading-relaxed">
+                                建立标准化的AI视频生产流程，在保证品质的同时大幅提升产出效率。
+                                通过智能化工具链，让创意人员专注于核心创意而非执行细节。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">技术方案</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">RunwayML Gen-2</span>
+                                <span class="tech-tag">可灵AI</span>
+                                <span class="tech-tag">ElevenLabs</span>
+                                <span class="tech-tag">ComfyUI</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                构建端到端的AI视频生产管线，从脚本生成、画面创作到配音合成全流程自动化。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">项目成果</h4>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">300%</div>
+                                    <div class="text-sm text-gray-400">效率提升</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">30条/天</div>
+                                    <div class="text-sm text-gray-400">产出能力</div>
+                                </div>
+                                <div class="text-center p-4 bg-white/5 rounded-xl">
+                                    <div class="text-3xl font-bold gradient-text">85%</div>
+                                    <div class="text-sm text-gray-400">成本降低</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold mb-3 text-purple-400">核心特色</h4>
+                            <ul class="space-y-2 text-gray-400">
+                                <li class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-3"></i>
+                                    <span>人物形象一致性保持技术</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-3"></i>
+                                    <span>多语言配音自动同步</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-3"></i>
+                                    <span>智能剪辑与节奏控制</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-3"></i>
+                                    <span>品牌风格自动适配</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 更多作品展示网格 -->
+            <div class="mt-20">
+                <h3 class="text-3xl font-bold text-center mb-12">
+                    <span class="gradient-text">更多作品展示</span>
+                </h3>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 作品卡片1 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-store text-3xl mb-2"></i><br>
+                                <span>电商Banner设计</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">双11主题Banner</h4>
+                            <p class="text-gray-400 text-sm mb-4">AI生成的节日促销视觉设计</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">Midjourney</span>
+                                <span class="text-xs tech-tag">Photoshop</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作品卡片2 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-gamepad text-3xl mb-2"></i><br>
+                                <span>游戏场景概念图</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">赛博都市场景</h4>
+                            <p class="text-gray-400 text-sm mb-4">未来主义风格游戏场景设计</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">Stable Diffusion</span>
+                                <span class="text-xs tech-tag">ControlNet</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作品卡片3 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-tshirt text-3xl mb-2"></i><br>
+                                <span>服装设计展示</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">潮牌服装设计</h4>
+                            <p class="text-gray-400 text-sm mb-4">AI辅助的图案与版型设计</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">CLO 3D</span>
+                                <span class="text-xs tech-tag">Midjourney</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作品卡片4 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-building text-3xl mb-2"></i><br>
+                                <span>建筑概念设计</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">未来建筑概念</h4>
+                            <p class="text-gray-400 text-sm mb-4">AI生成的建筑外观设计方案</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">Stable Diffusion</span>
+                                <span class="text-xs tech-tag">Photoshop</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作品卡片5 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-paint-brush text-3xl mb-2"></i><br>
+                                <span>插画艺术创作</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">梦境系列插画</h4>
+                            <p class="text-gray-400 text-sm mb-4">超现实主义风格艺术探索</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">Midjourney</span>
+                                <span class="text-xs tech-tag">Procreate</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 作品卡片6 -->
+                    <div class="project-card rounded-2xl overflow-hidden group cursor-pointer">
+                        <div class="aspect-square image-placeholder">
+                            <div>
+                                <i class="fas fa-box text-3xl mb-2"></i><br>
+                                <span>包装设计方案</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold mb-2">新品包装设计</h4>
+                            <p class="text-gray-400 text-sm mb-4">环保理念的创新包装设计</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs tech-tag">Stable Diffusion</span>
+                                <span class="text-xs tech-tag">Blender</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分割线 -->
+    <div class="section-divider"></div>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">
+                <span class="gradient-text">开启合作</span>
+            </h2>
+            
+            <p class="text-xl text-gray-400 mb-12">
+                期待与您探讨AI视觉设计的无限可能
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="neon-border p-8 rounded-2xl text-center">
+                    <i class="fas fa-envelope text-3xl gradient-text mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">邮箱</h3>
+                    <p class="text-gray-400">your.email@example.com</p>
+                </div>
+                
+                <div class="neon-border p-8 rounded-2xl text-center">
+                    <i class="fab fa-weixin text-3xl gradient-text mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">微信</h3>
+                    <p class="text-gray-400">your_wechat</p>
+                </div>
+                
+                <div class="neon-border p-8 rounded-2xl text-center">
+                    <i class="fas fa-phone text-3xl gradient-text mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">电话</h3>
+                    <p class="text-gray-400">138-xxxx-xxxx</p>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <a href="#" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-purple-500 transition-all">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-purple-500 transition-all">
+                    <i class="fab fa-behance text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-purple-500 transition-all">
+                    <i class="fab fa-dribbble text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-purple-500 transition-all">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-white/10 py-8">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-500">© 2024 AIGC Portfolio. Crafted with AI & Passion.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片画廊功能
+        const galleries = {};
+        
+        function initGallery(galleryId) {
+            galleries[galleryId] = {
+                currentSlide: 0,
+                slides: document.querySelectorAll(`#${galleryId} .gallery-slide`).length
+            };
+        }
+        
+        function changeSlide(galleryId, direction) {
+            if (!galleries[galleryId]) initGallery(galleryId);
+            
+            const gallery = galleries[galleryId];
+            gallery.currentSlide += direction;
+            
+            if (gallery.currentSlide < 0) {
+                gallery.currentSlide = gallery.slides - 1;
+            } else if (gallery.currentSlide >= gallery.slides) {
+                gallery.currentSlide = 0;
+            }
+            
+            updateGallery(galleryId);
+        }
+        
+        function goToSlide(galleryId, slideIndex) {
+            if (!galleries[galleryId]) initGallery(galleryId);
+            
+            galleries[galleryId].currentSlide = slideIndex;
+            updateGallery(galleryId);
+        }
+        
+        function updateGallery(galleryId) {
+            const gallery = galleries[galleryId];
+            const slider = document.querySelector(`#${galleryId}`);
+            const dots = slider.parentElement.querySelectorAll('.gallery-dot');
+            
+            slider.style.transform = `translateX(-${gallery.currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                if (index === gallery.currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // 初始化所有画廊
+        document.addEventListener('DOMContentLoaded', () => {
+            initGallery('gallery1');
+            initGallery('gallery2');
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 初始化动画元素
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
